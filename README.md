@@ -2,7 +2,23 @@
 
 ## React component for uploading files to Firebase
 
-![](./Acordion_White.png)
+You need to initialize a firebase application and create the storage object.
+
+```bash
+import { initializeApp } from "firebase/app";
+import { getStorage } from "firebase/storage";
+import firebaseConfig from "./config";
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage();
+
+const Firebase = {
+  storage,
+};
+
+export default Firebase;
+export { storage };
+```
 
 ### How To Install?
 
