@@ -1,0 +1,48 @@
+{
+  "name": "firebase-file-uploader-react",
+  "version": "1.0.0",
+  "description": "React component for uploading files to Firebase",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src/lib --out-dir dist --copy-files"
+  },
+  "keywords": [
+    "react",
+    "file uploader",
+    "firebase storage"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "author": {
+    "name": "Ronald Villagrán",
+    "email": "ronald3217@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ronald3217/react-acordion.git"
+  },
+  "dependencies": {
+    "@babel/polyfill": "7.12.1",
+    "@babel/runtime": "7.14.6",
+    "core-js": "3.15.2",
+    "firebase": "9.6.5",
+    "prop-types": "15.8.1",
+    "react": "17.0.2",
+    "shortid": "2.2.16"
+  },
+  "peerDependencies": {
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.14.5",
+    "@babel/core": "7.14.6",
+    "@babel/preset-env": "7.14.7",
+    "@babel/preset-react": "7.14.5"
+  }
+}
