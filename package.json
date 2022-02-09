@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ronald3217/react-acordion.git"
+    "url": "git+https://github.com/Ronald3217/firebase-file-uploader-react.git"
   },
   "dependencies": {
     "@babel/polyfill": "7.12.1",
