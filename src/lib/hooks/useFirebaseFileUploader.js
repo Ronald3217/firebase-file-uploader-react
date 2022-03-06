@@ -21,7 +21,7 @@ const useFirebaseFileUploader = (config) => {
   const [originalFileName, setOriginalFileName] = useState("");
   const [error, setError] = useState(null);
 
-  const FileUploaderUI = (props) => {
+  const FileUploaderUI = React.forwardRef((props, ref) => {
     // Funcion para subir la imagen
     const handleUploadStart = (snapshot) => {
       const progress = Math.round(
@@ -59,10 +59,11 @@ const useFirebaseFileUploader = (config) => {
         type="file"
         onChange={handleUploadChange}
         disabled={uploading}
+        ref={ref}
         {...props}
       />
     );
-  };
+  });
   return {
     uploading,
     progress,
