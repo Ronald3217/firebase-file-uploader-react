@@ -32,7 +32,9 @@ npm i firebase-file-uploader-react
 const config = {
     storage,
     path: 'products'
-    filename?: 'shirt' optional: STRING or FUNCTION for custom filename for uploaded cloud file,as FUNCTION passes the original filename as func args e.g filename: (originalFilename)=>{ return `${originalFilename}-fancyname`}
+    filename?: 'shirt' optional: STRING or FUNCTION for custom filename\
+    or uploaded cloud file,as FUNCTION passes the original filename as\
+    func args e.g filename: (originalFilename)=>{ return `${originalFilename}-fancyname`}
 }
 ```
 
