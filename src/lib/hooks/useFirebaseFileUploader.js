@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { omit, isFunction } from "lodash";
+import { isFunction } from "lodash";
 import shortid from "shortid";
 import PropTypes from "prop-types";
 
@@ -20,7 +20,6 @@ const useFirebaseFileUploader = (config) => {
   const [fileName, setFileName] = useState("");
   const [originalFileName, setOriginalFileName] = useState("");
   const [error, setError] = useState(null);
-  const [inputElement, setInputElement] = useState(null);
 
   const FileUploaderUI = (props) => {
     // Funcion para subir la imagen
@@ -30,14 +29,6 @@ const useFirebaseFileUploader = (config) => {
       );
       setProgress(progress);
     };
-    const ref = useRef();
-    useEffect(() => {
-      if (ref && ref.current) {
-        console.log(ref.current);
-        setInputElement(ref);
-      }
-    }, []);
-
     const handleUploadError = (error) => {
       setUploading(false);
       setError(error);
@@ -68,7 +59,6 @@ const useFirebaseFileUploader = (config) => {
         type="file"
         onChange={handleUploadChange}
         disabled={uploading}
-        ref={ref}
         {...props}
       />
     );
