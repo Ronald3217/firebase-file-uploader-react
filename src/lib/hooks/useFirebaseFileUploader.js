@@ -72,7 +72,6 @@ const useFirebaseFileUploader = (config) => {
     originalFileName,
     error,
     FileUploaderUI,
-    inputElement,
   };
 };
 
