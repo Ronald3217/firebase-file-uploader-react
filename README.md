@@ -32,6 +32,7 @@ npm i firebase-file-uploader-react
 const config = {
     storage,
     path: 'products'
+    filename?: 'shirt' (optional custom filename for uploaded cloud file)
 }
 ```
 
@@ -45,6 +46,7 @@ const someComponent = ()=>(
     useFirebaseFileUploader({
       storage,
       path: "products",
+      filename: "t-shirt"
     });
     <FileUploaderUI
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

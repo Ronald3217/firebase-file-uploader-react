@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { omit, isFunction } from "lodash";
 import shortid from "shortid";
 import PropTypes from "prop-types";
+
+const getFileName = (payload, file) => {
+  //function to use a custom filename with a filename prop in the config or generate random filename
+  if (isFunction(payload)) {
+    return payload(file.name);
+  }
+  return payload || shortid.generate();
+};
 
 const useFirebaseFileUploader = (config) => {
   // State para las Imagenes
@@ -29,7 +38,7 @@ const useFirebaseFileUploader = (config) => {
       setOriginalFileName(event.target.files[0].name);
       setUploading(true);
       const file = event.target.files[0];
-      const fileName = shortid.generate();
+      const fileName = getFileName(config?.filename, file);
       setFileName(fileName);
       if (!file) return;
       const storageRef = ref(config.storage, `${config.path}/${fileName}`);
@@ -59,6 +68,7 @@ const useFirebaseFileUploader = (config) => {
     progress,
     fileURL,
     fileName,
+    originalFileName,
     error,
     FileUploaderUI,
   };
