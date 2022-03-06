@@ -33,9 +33,10 @@ const useFirebaseFileUploader = (config) => {
     const ref = useRef();
     useEffect(() => {
       if (ref && ref.current) {
+        console.log(ref.current);
         setInputElement(ref);
       }
-    }, [ref]);
+    }, []);
 
     const handleUploadError = (error) => {
       setUploading(false);
@@ -80,7 +81,7 @@ const useFirebaseFileUploader = (config) => {
     originalFileName,
     error,
     FileUploaderUI,
-    inputElement
+    inputElement,
   };
 };
 
