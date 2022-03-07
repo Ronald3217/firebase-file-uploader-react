@@ -4,13 +4,12 @@ import { isFunction } from "lodash";
 import shortid from "shortid";
 import PropTypes from "prop-types";
 
-const getFileName = (payload, file, includeExt) => {
+const getFileName = (payload, file) => {
   //function to use a custom filename with a filename prop in the config or generate random filename
-  const ext = includeExt ? file?.type.replace(/(.*)\//g, "") : "";
   if (isFunction(payload)) {
-    return payload(`${file?.name}.${ext}`);
+    return payload(file?.name);
   }
-  return `${payload}.${ext}` || shortid.generate();
+  return payload || shortid.generate();
 };
 
 const useFirebaseFileUploader = (config) => {
@@ -39,7 +38,10 @@ const useFirebaseFileUploader = (config) => {
       setOriginalFileName(event.target.files[0].name);
       setUploading(true);
       const file = event.target.files[0];
-      const fileName = getFileName(config?.filename, file, config?.includeExt);
+      const ext = config?.includeExt ? file?.type.replace(/(.*)\//g, "") : null;
+      const fileName = ext
+        ? getFileName(config?.filename, file) + "." + ext
+        : getFileName(config?.filename, file);
       setFileName(fileName);
       if (!file) return;
       const storageRef = ref(config.storage, `${config.path}/${fileName}`);
@@ -82,6 +84,6 @@ useFirebaseFileUploader.propTypes = {
   config: PropTypes.shape({
     storage: PropTypes.object.isRequired,
     path: PropTypes.string.isRequired,
-    includeExt: false,
+    includeExt: PropTypes.bool
   }),
 };
