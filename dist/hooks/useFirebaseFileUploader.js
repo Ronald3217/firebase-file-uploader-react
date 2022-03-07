@@ -15,6 +15,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _storage = require("firebase/storage");
 
+var _lodash = require("lodash");
+
 var _shortid = _interopRequireDefault(require("shortid"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -27,6 +29,15 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+const getFileName = (payload, file) => {
+  //function to use a custom filename with a filename prop in the config or generate random filename
+  if ((0, _lodash.isFunction)(payload)) {
+    return payload(file.name);
+  }
+
+  return payload || _shortid.default.generate();
+};
+
 const useFirebaseFileUploader = config => {
   // State para las Imagenes
   const [uploading, setUploading] = (0, _react.useState)(false);
@@ -36,7 +47,7 @@ const useFirebaseFileUploader = config => {
   const [originalFileName, setOriginalFileName] = (0, _react.useState)("");
   const [error, setError] = (0, _react.useState)(null);
 
-  const FileUploaderUI = props => {
+  const FileUploaderUI = /*#__PURE__*/_react.default.forwardRef((props, inputRef) => {
     // Funcion para subir la imagen
     const handleUploadStart = snapshot => {
       const progress = Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 100);
@@ -53,9 +64,7 @@ const useFirebaseFileUploader = config => {
       setOriginalFileName(event.target.files[0].name);
       setUploading(true);
       const file = event.target.files[0];
-
-      const fileName = _shortid.default.generate();
-
+      const fileName = getFileName(config === null || config === void 0 ? void 0 : config.filename, file);
       setFileName(fileName);
       if (!file) return;
       const storageRef = (0, _storage.ref)(config.storage, "".concat(config.path, "/").concat(fileName));
@@ -70,15 +79,17 @@ const useFirebaseFileUploader = config => {
     return /*#__PURE__*/_react.default.createElement("input", _extends({
       type: "file",
       onChange: handleUploadChange,
-      disabled: uploading
+      disabled: uploading,
+      ref: inputRef
     }, props));
-  };
+  });
 
   return {
     uploading,
     progress,
     fileURL,
     fileName,
+    originalFileName,
     error,
     FileUploaderUI
   };
