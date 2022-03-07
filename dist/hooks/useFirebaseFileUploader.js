@@ -7,6 +7,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+require("core-js/modules/es.regexp.exec.js");
+
+require("core-js/modules/es.string.replace.js");
+
 require("core-js/modules/web.dom-collections.iterator.js");
 
 require("core-js/modules/es.promise.js");
@@ -29,13 +33,15 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-const getFileName = (payload, file) => {
+const getFileName = (payload, file, includeExt) => {
   //function to use a custom filename with a filename prop in the config or generate random filename
+  const ext = includeExt ? file === null || file === void 0 ? void 0 : file.type.replace(/(.*)\//g, "") : "";
+
   if ((0, _lodash.isFunction)(payload)) {
-    return payload(file.name);
+    return payload("".concat(file === null || file === void 0 ? void 0 : file.name, ".").concat(ext));
   }
 
-  return payload || _shortid.default.generate();
+  return "".concat(payload, ".").concat(ext) || _shortid.default.generate();
 };
 
 const useFirebaseFileUploader = config => {
@@ -64,7 +70,7 @@ const useFirebaseFileUploader = config => {
       setOriginalFileName(event.target.files[0].name);
       setUploading(true);
       const file = event.target.files[0];
-      const fileName = getFileName(config === null || config === void 0 ? void 0 : config.filename, file);
+      const fileName = getFileName(config === null || config === void 0 ? void 0 : config.filename, file, config === null || config === void 0 ? void 0 : config.includeExt);
       setFileName(fileName);
       if (!file) return;
       const storageRef = (0, _storage.ref)(config.storage, "".concat(config.path, "/").concat(fileName));
@@ -100,6 +106,7 @@ exports.default = _default;
 useFirebaseFileUploader.propTypes = {
   config: _propTypes.default.shape({
     storage: _propTypes.default.object.isRequired,
-    path: _propTypes.default.string.isRequired
+    path: _propTypes.default.string.isRequired,
+    includeExt: false
   })
 };
