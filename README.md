@@ -45,7 +45,7 @@ const config = {
 import { useFirebaseFileUploader } from 'firebase-file-uploader-react';
 
 const someComponent = ()=>(
-    const { FileUploaderUI, uploading, progress, error, fileURL, originalFilename, inputElement } =
+    const { FileUploaderUI, uploading, progress, error, fileURL, originalFilename, inputElement, fileType } =
     useFirebaseFileUploader({
       storage,
       path: "products",
