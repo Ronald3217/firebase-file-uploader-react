@@ -18,6 +18,7 @@ const useFirebaseFileUploader = (config) => {
   const [progress, setProgress] = useState(0);
   const [fileURL, setFileUrl] = useState("");
   const [fileName, setFileName] = useState("");
+  const [fileType, setFileType] = useState("");
   const [originalFileName, setOriginalFileName] = useState("");
   const [error, setError] = useState(null);
 
@@ -35,9 +36,10 @@ const useFirebaseFileUploader = (config) => {
       console.log(error);
     };
     const handleUploadChange = (event) => {
-      setOriginalFileName(event.target.files[0].name);
-      setUploading(true);
       const file = event.target.files[0];
+      setOriginalFileName(file.name);
+      setFileType(file.type);
+      setUploading(true);
       const ext = config?.includeExt ? file?.type.replace(/(.*)\//g, "") : null;
       const fileName = ext
         ? getFileName(config?.filename, file) + "." + ext
@@ -73,6 +75,7 @@ const useFirebaseFileUploader = (config) => {
     fileURL,
     fileName,
     originalFileName,
+    fileType,
     error,
     FileUploaderUI,
   };
@@ -84,6 +87,6 @@ useFirebaseFileUploader.propTypes = {
   config: PropTypes.shape({
     storage: PropTypes.object.isRequired,
     path: PropTypes.string.isRequired,
-    includeExt: PropTypes.bool
+    includeExt: PropTypes.bool,
   }),
 };
