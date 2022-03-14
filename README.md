@@ -4,13 +4,13 @@
 
 You need to initialize a firebase application and create the storage object.
 
-```bash
+```js
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 import firebaseConfig from "./config";
 
 const app = initializeApp(firebaseConfig);
-const storage = getStorage();
+const storage = getStorage(app);
 
 const Firebase = {
   storage,
@@ -41,24 +41,26 @@ const config = {
 
 ### How To Use?
 
-```bash
+```js
 import { useFirebaseFileUploader } from 'firebase-file-uploader-react';
 
-const someComponent = ()=>(
+const App = () => {
     const { FileUploaderUI, uploading, progress, error, fileURL, originalFilename, inputElement, fileType } =
     useFirebaseFileUploader({
       storage,
       path: "products",
       filename: "t-shirt"
     });
-    <FileUploaderUI
+    return (
+      <FileUploaderUI
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         accept="image/*"
         id="imagen"
         name="imagen"
         draggable="true"
       />
-)
+    )
+}
 ```
 
 ### Style
