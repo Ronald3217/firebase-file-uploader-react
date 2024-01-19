@@ -33,9 +33,10 @@ const config = {
     storage,
     path: 'products'
     includeExt?: false optional:BOOLEAN to include file extension type to file name
-    filename?: 'shirt' optional: STRING or FUNCTION for custom filename\
+    filename?: (filename) => "t-shirt", optional: STRING or FUNCTION for custom filename\
     or uploaded cloud file,as FUNCTION passes the original filename as\
-    func args e.g filename: (originalFilename)=>{ return `${originalFilename}-fancyname`}
+    func args e.g filename: (originalFilename)=>{ return `${originalFilename}-fancyname`}\
+    e.g 2 filename: (originalFilename)=>originalFilename to keep original filename
 }
 ```
 

@@ -52,14 +52,14 @@ const useFirebaseFileUploader = (config: config) => {
       setOriginalFileName(file.name);
       setFileType(file.type);
       setUploading(true);
-      const ext = config?.includeExt ? file?.type.replace(/(.*)\//g, "") : null;
-      const { filename, storage, path } = config
+      const { includeExt,filename, storage, path } = config
+      const ext = includeExt ? file?.type.replace(/(.*)\//g, "") : null;
       const uploadfileName = ext
         ? getFileName({ payload: filename, file }) + "." + ext
         : getFileName({ payload: filename, file });
       setFileName(uploadfileName);
       if (!file) return;
-      const storageRef = ref(storage, `${path}/${fileName}`);
+      const storageRef = ref(storage, `/${path}/${uploadfileName}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         "state_changed",

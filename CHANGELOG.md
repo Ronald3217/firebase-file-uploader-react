@@ -6,6 +6,10 @@ React component to upload files to Firebase Storage.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
+## [1.0.6] - 2024-01-18
+
+Fixed an error that caused files to be uploaded with the name of the previous file.
+
 ## [1.0.5] - 2024-01-18
  
 The code was rewritten with TypeScript, and the Dependencies were updated.
