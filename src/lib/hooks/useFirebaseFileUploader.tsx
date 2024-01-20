@@ -3,24 +3,24 @@ import { ref, uploadBytesResumable, getDownloadURL, FirebaseStorage, UploadTaskS
 import { isFunction } from "lodash";
 import { nanoid } from "nanoid";
 
-interface getFileName {
+export type getFileName = {
   payload?: string | ((filename: string) => string),
   file: File,
 }
-interface config {
+export type config = {
   storage: FirebaseStorage,
   path: string,
   includeExt?: boolean
   filename?: string | ((filename: string) => string),
 }
-interface HookValues {
+export type HookValues = {
   uploading: boolean,
   progress: number,
   fileURL: string,
   fileName: string,
   fileType: string,
   originalFileName: string,
-  error: StorageError | undefined
+  error: StorageError | boolean
   FileUploaderUI: React.ForwardRefExoticComponent<React.InputHTMLAttributes<HTMLInputElement>>
 }
 
@@ -32,7 +32,7 @@ const getFileName = ({ payload, file }: getFileName) => {
   return payload || nanoid();
 };
 
-const useFirebaseFileUploader = (config: config): HookValues => {
+const useFirebaseFileUploader = (config: config) => {
   // State para las Imagenes
   const [uploading, setUploading] = React.useState<boolean>(false);
   const [progress, setProgress] = React.useState<number>(0);
@@ -40,7 +40,7 @@ const useFirebaseFileUploader = (config: config): HookValues => {
   const [fileName, setFileName] = React.useState<string>("");
   const [fileType, setFileType] = React.useState<string>("");
   const [originalFileName, setOriginalFileName] = React.useState<string>("");
-  const [error, setError] = React.useState<StorageError>();
+  const [error, setError] = React.useState<StorageError | boolean>(false);
 
   const FileUploaderUI = React.forwardRef((props: React.InputHTMLAttributes<HTMLInputElement>, inputRef: React.LegacyRef<HTMLInputElement>) => {
     // Funcion para subir la imagen

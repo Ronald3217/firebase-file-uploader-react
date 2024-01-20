@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "swc ./src/lib -d dist --copy-files",
-    "build:tsup": "tsup"
+    "build:tsup": "tsup",
+    "build:docs": "typedoc src/lib/index.tsx"
   },
   "keywords": [
     "react",
