@@ -33,10 +33,10 @@ const config = {
     storage,
     path: 'products'
     includeExt?: false optional:BOOLEAN to include file extension type to file name
-    filename?: (filename) => "t-shirt", optional: STRING or FUNCTION for custom filename\
-    or uploaded cloud file,as FUNCTION passes the original filename as\
-    func args e.g filename: (originalFilename)=>{ return `${originalFilename}-fancyname`}\
-    e.g 2 filename: (originalFilename)=>originalFilename to keep original filename
+    filename?: (filename) => "t-shirt", optional: STRING or FUNCTION for custom filename
+    filename?: (filename)=> `${filename}-fancyname` Ex: #2
+    filename?: (filename)=> filename Ex: to keep original filename, FUNCTION passes the original filename as\
+    func args e.g 
 }
 ```
 
@@ -50,7 +50,7 @@ const App = () => {
     useFirebaseFileUploader({
       storage,
       path: "products",
-      filename: "t-shirt"
+      filename: (filename) => "t-shirt"
     });
     return (
       <FileUploaderUI

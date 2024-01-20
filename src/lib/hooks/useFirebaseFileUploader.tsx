@@ -4,14 +4,24 @@ import { isFunction } from "lodash";
 import { nanoid } from "nanoid";
 
 interface getFileName {
-  payload?: (filename:string) => string | string,
-  file: File
+  payload?: string | ((filename: string) => string),
+  file: File,
 }
 interface config {
   storage: FirebaseStorage,
   path: string,
   includeExt?: boolean
-  filename?: (filename:string) => string | string,
+  filename?: string | ((filename: string) => string),
+}
+interface HookValues {
+  uploading: boolean,
+  progress: number,
+  fileURL: string,
+  fileName: string,
+  fileType: string,
+  originalFileName: string,
+  error: StorageError | undefined
+  FileUploaderUI: React.ForwardRefExoticComponent<React.InputHTMLAttributes<HTMLInputElement>>
 }
 
 const getFileName = ({ payload, file }: getFileName) => {
@@ -22,14 +32,14 @@ const getFileName = ({ payload, file }: getFileName) => {
   return payload || nanoid();
 };
 
-const useFirebaseFileUploader = (config: config) => {
+const useFirebaseFileUploader = (config: config): HookValues => {
   // State para las Imagenes
-  const [uploading, setUploading] = React.useState(false);
-  const [progress, setProgress] = React.useState(0);
-  const [fileURL, setFileUrl] = React.useState("");
-  const [fileName, setFileName] = React.useState("");
-  const [fileType, setFileType] = React.useState("");
-  const [originalFileName, setOriginalFileName] = React.useState("");
+  const [uploading, setUploading] = React.useState<boolean>(false);
+  const [progress, setProgress] = React.useState<number>(0);
+  const [fileURL, setFileUrl] = React.useState<string>("");
+  const [fileName, setFileName] = React.useState<string>("");
+  const [fileType, setFileType] = React.useState<string>("");
+  const [originalFileName, setOriginalFileName] = React.useState<string>("");
   const [error, setError] = React.useState<StorageError>();
 
   const FileUploaderUI = React.forwardRef((props: React.InputHTMLAttributes<HTMLInputElement>, inputRef: React.LegacyRef<HTMLInputElement>) => {
@@ -52,7 +62,7 @@ const useFirebaseFileUploader = (config: config) => {
       setOriginalFileName(file.name);
       setFileType(file.type);
       setUploading(true);
-      const { includeExt,filename, storage, path } = config
+      const { includeExt, filename, storage, path } = config
       const ext = includeExt ? file?.type.replace(/(.*)\//g, "") : null;
       const uploadfileName = ext
         ? getFileName({ payload: filename, file }) + "." + ext
