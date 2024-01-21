@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ref, uploadBytesResumable, getDownloadURL, FirebaseStorage, UploadTaskSnapshot, StorageError } from "firebase/storage";
+import { ref as firebaseRef, uploadBytesResumable, getDownloadURL, FirebaseStorage, UploadTaskSnapshot, StorageError } from "firebase/storage";
 import { isFunction } from "lodash";
 import { nanoid } from "nanoid";
 
@@ -21,7 +21,8 @@ export type HookValues = {
   fileType: string,
   originalFileName: string,
   error: StorageError | boolean
-  FileUploaderUI: React.ForwardRefExoticComponent<React.InputHTMLAttributes<HTMLInputElement>>
+}
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const getFileName = ({ payload, file }: getFileName) => {
@@ -32,7 +33,12 @@ const getFileName = ({ payload, file }: getFileName) => {
   return payload || nanoid();
 };
 
-const useFirebaseFileUploader = (config: config) => {
+const useFirebaseFileUploader = (config: {
+  storage: FirebaseStorage,
+  path: string,
+  includeExt?: boolean
+  filename?: string | ((filename: string) => string),
+}) => {
   // State para las Imagenes
   const [uploading, setUploading] = React.useState<boolean>(false);
   const [progress, setProgress] = React.useState<number>(0);
@@ -42,7 +48,7 @@ const useFirebaseFileUploader = (config: config) => {
   const [originalFileName, setOriginalFileName] = React.useState<string>("");
   const [error, setError] = React.useState<StorageError | boolean>(false);
 
-  const FileUploaderUI = React.forwardRef((props: React.InputHTMLAttributes<HTMLInputElement>, inputRef: React.LegacyRef<HTMLInputElement>) => {
+  const Input:React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (props, ref) => {
     // Funcion para subir la imagen
     const handleUploadStart = (snapshot: UploadTaskSnapshot) => {
       const progress = Math.round(
@@ -69,7 +75,7 @@ const useFirebaseFileUploader = (config: config) => {
         : getFileName({ payload: filename, file });
       setFileName(uploadfileName);
       if (!file) return;
-      const storageRef = ref(storage, `/${path}/${uploadfileName}`);
+      const storageRef = firebaseRef(storage, `/${path}/${uploadfileName}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         "state_changed",
@@ -87,11 +93,13 @@ const useFirebaseFileUploader = (config: config) => {
         type="file"
         onChange={handleUploadChange}
         disabled={uploading}
-        ref={inputRef}
         {...props}
+        ref={ref}
       />
     );
-  });
+  }
+
+  const FileUploaderUI = React.forwardRef(Input);
   return {
     uploading,
     progress,

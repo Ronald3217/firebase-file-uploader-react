@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { FirebaseStorage, StorageError } from 'firebase/storage';
 
-type config = {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+}
+declare const useFirebaseFileUploader: (config: {
     storage: FirebaseStorage;
     path: string;
-    includeExt?: boolean;
-    filename?: string | ((filename: string) => string);
-};
-type HookValues = {
+    includeExt?: boolean | undefined;
+    filename?: string | ((filename: string) => string) | undefined;
+}) => {
     uploading: boolean;
     progress: number;
     fileURL: string;
     fileName: string;
-    fileType: string;
     originalFileName: string;
-    error: StorageError | boolean;
-    FileUploaderUI: React.ForwardRefExoticComponent<React.InputHTMLAttributes<HTMLInputElement>>;
+    fileType: string;
+    error: boolean | StorageError;
+    FileUploaderUI: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HTMLInputElement>>;
 };
-declare const useFirebaseFileUploader: (config: config) => HookValues;
 
 export { useFirebaseFileUploader };
