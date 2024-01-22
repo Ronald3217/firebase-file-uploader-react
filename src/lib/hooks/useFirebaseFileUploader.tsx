@@ -3,24 +3,25 @@ import { ref as firebaseRef, uploadBytesResumable, getDownloadURL, FirebaseStora
 import { isFunction } from "lodash";
 import { nanoid } from "nanoid";
 
-export type getFileName = {
+export interface getFileName {
   payload?: string | ((filename: string) => string),
   file: File,
 }
-export type config = {
+export interface ConfigInterface {
   storage: FirebaseStorage,
   path: string,
   includeExt?: boolean
   filename?: string | ((filename: string) => string),
 }
-export type HookValues = {
+export interface HookValues {
   uploading: boolean,
   progress: number,
   fileURL: string,
   fileName: string,
   fileType: string,
   originalFileName: string,
-  error: StorageError | boolean
+  error: StorageError | boolean,
+  FileUploaderUI: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HTMLInputElement>>;
 }
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
@@ -32,13 +33,16 @@ const getFileName = ({ payload, file }: getFileName) => {
   }
   return payload || nanoid();
 };
-
-const useFirebaseFileUploader = (config: {
-  storage: FirebaseStorage,
-  path: string,
-  includeExt?: boolean
-  filename?: string | ((filename: string) => string),
-}) => {
+/**
+ * React.js Custom Hook to upload files to a firebase storage instance.
+ * @param config -{@link ConfigInterface} Hook Config.
+ * @param config.storage - FirebaseStorage instance.
+ * @param config.path - Path where the files will be uploaded.
+ * @param config.includeExt - boolean, if you want to include the extension in the file name.
+ * @param config.filename - Function to rename the file ex: (filename)=> "t-shirt" . ex 2: (filename)=> filename - to keep the original name.
+ * @returns HookValues - {@link HookValues} Returns the following values: uploading,progress, fileURL, fileName, fileType, originalFileName, error.
+ */
+const useFirebaseFileUploader = (config: ConfigInterface): HookValues => {
   // State para las Imagenes
   const [uploading, setUploading] = React.useState<boolean>(false);
   const [progress, setProgress] = React.useState<number>(0);
